@@ -1,0 +1,22 @@
+> launch an instance
+
+# sudo apt update (update the system using)
+# sudo apt install aws cli -y
+# aws help (for checking of installation, if showing man pages then it successfully installed.)
+
+> q - exite from man pages
+
+> security credentials from aws console. (user name >> security credentials. will take to the IAM console)
+
+> click create new access key
+
+# aws configure
+
+> copy & paste the Access key ID and Secret Access Key
+
+> regiion , output formate let blank if not has defined.
+
+# aws s3 ls
+
+# ll 
+> for directories and hidden directories too.
