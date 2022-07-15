@@ -1,1 +1,33 @@
-keep the local version currently installed while upgrading
+****************************************************
+            Multinode Deployment
+************************************************
+
+
+
+* keep the local version currently installed while upgrading
+
+$ ~/ .ssh
+$ cd .ssh ./
+$ ls
+$ ls -l
+$ chmod 600 neworegon.pem
+$ cd
+$ sudo adduser hadoop
+$ sudo adduser hduser sudo
+$ su hduser
+$ cd
+
+
+-----** Creating passwordless ssh **------
+
+$ ssh-keygen
+$ cd.ssh
+$ cat id_rsa.pub >> authorized_keys
+$ cd
+$ ssh localhost
+$ exit
+$ sudo su
+
+
+* Installing Java 8 (open jdk)
+
