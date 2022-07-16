@@ -29,8 +29,8 @@ $ exit
 $ sudo su
 [sudo] Password for hduser:
 # cd
-# cp /home/ubuntu/.ssh/northvergenia.pem /home/hduser/.ssh/
-# chown hduser:hadoop /home/hduser/.ssh/northverginia.pem
+# cp /home/ubuntu/.ssh/neworegon.pem /home/hduser/.ssh/
+# chown hduser:hadoop /home/hduser/.ssh/neworegon.pem
 # exit
 $ cd .ssh/
 $ ls
@@ -55,10 +55,225 @@ $ sudo chown hduser:hadoop -R /usr/local/hadoop
 -------** Setting Environment Variables **-----
 $ nano /bashrc
 
-export JAVA HOME=usr/lib/`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````export
-export
-export
-export
-export
-export
-export
+export JAVA HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export PATH=$PATH:/usr/local/hadoop/bin/
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP-CONF_DIR=/usr/local/hadoop/etc/hadoop
+
+$ source .bashrc
+$ cd usr/local/hadoop/etc/hadoop/
+
+
+
+------** Update Hadoop-env.sh **------
+
+$ nano hadoop-env.sh
+
+            #export HADOOP_REGISTRYDNS_SECURE_EXTRA_OPTS="jvm server"
+
+export JAVA HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_LOG-DIR=/var/log/hadoop
+
+$ sudo mkdir /var/log/hadoop/
+$ sudo chown -R hduser:hadoop /var/log/hadoop
+$ cd
+
+
+
+------- ** Disable Firewall iptables ** ----
+
+$ -l -n
+$ sudo ufw status
+$ sudo ufw disable
+
+
+
+----- ** Disabling Transparent Hugepage Compaction ** -----
+
+$ cat /sys/kernel/mm/transparent.hugepage/defrag
+$ sudo nano /etc/rc.local
+
+#By default this script does nothing.
+if test-f /sys/kernel/mm/transparent_hugepage/enable;then
+   echo never > /sys/kernel/mm/transparent-hugepage/enabled
+fi
+if test-f /sys/kernel/mm/transparent_hugepage/defrag; then
+    echo never > /sys/kernel/mm/transparent-hugepage/defrag
+fi
+
+exit0
+
+$ sudo -i
+~# source /etc/rc.local
+
+
+------ *** Set Swappiness *** -----
+
+$ sudo sysctl -a | grep v.m.swappiness
+v.m.swappiness= 60
+$ sudo sysctl vm.swappiness=1
+
+
+
+------ ** Configure NTP ** -------
+
+$ timedatectl status 
+$ timedatectl list-timezones
+$ timedatectl set-timezone Asia/Kolkata
+$ sudo ntpq -p
+$ sudo apt install ntp -y
+
+
+
+------- ** Configure SSH passwordless login ** ------
+
+$ sudo su -c touch /home/hduser/.ssh/config: echo “Host *n\ StrictHostKeyChecking no\n > UserknownHostsFile=/dev/null” > /home/hduser/.ssh/config
+
+No passwd entry for user '/home/hduser/.ssh/config'
+
+$ sudo service ssh restart
+
+
+
+
+----- ** Configure .profile ** -----
+
+$ nano .profile
+eval ‘ssh-agent’ ssh-add /home/hduser/ .ssh/ neworegon.pem
+
+$ source .profile
+Agent pid 14029
+Identity added: /home/hduser/.ssh/neworegon.pem (/home/hduser/.ssh/neworegon.pem)
+
+* put it on AMI
+* create image
+* launch the instance through the AMI
+* tag the hosts with given names
+
+
+------ ** check the connectivity ** ------
+
+$ cd .ssh/
+$ ls
+$ ssh -i neworegon.pem ubuntu@ < private ip (copied) >
+$ exite
+
+
+
+------- ** create a html file on your pc ** -------
+
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+copy
+
+$ sudo nano /etc/hosts
+past here after 1st line
+
+$ ssh -i neworegon.pem ubuntu@rm
+$ exit
+
+/.ssh$ cd
+$ ll
+
+$ ssh rm
+$ sudo nano /etc/hosts
+Password:
+* in second line, past
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+< private ip > < private dns > < host name >
+
+$ exit
+
+* repeat for the remaining hosts
+
+
+
+------- ** Install & configure dsh ** -------
+
+$ sudo apt install dsh -y
+$ sudo nano /etc/dsh/machines.list
+#localhost
+Nn
+Rm
+1dn
+2dn
+3dn
+
+$ dsh -a uptime
+
+
+
+
+
+------- ** Hadoop Configurations ** -------
+
+$ cd /usr/local/hadoop/etc/hadoop/
+nano masters
+Rm
+
+$ nano workers
+#localhosts
+1dn
+2dn
+3dn
+
+
+
+
+------- ** Update coresite .xml ** -------
+
+$nano core-site.xml
+<property>
+	<name>fs.defaultFS</name>
+	<value>hdfs://nn:9000</value>
+      </property>
+
+
+
+
+
+------- ** Update hdfs-site.xml on name node ** -------
+
+$ mkdir -p /usr/local/hadoop/data/hdfs/namenode
+
+$ nano hdfs-site.xml
+<configuration>
+<property>
+            <name>dfs.replication</name>
+	<value>3</value>
+        <property>
+        <property>
+	<name>dfs.namenode.name.dir</name>
+	<value>file:///usr/local/hadoop/data/hdfs/namenode</value>
+        <property>
+        </property>
+	<name>dfs.datanode.data.dir</name>
+	<value>file:///usr/local/hadoop/data/hdfs/datanode</value>
+        </property>
+
+</configuration>
+
+
+$ dsh -m 1dn, 2dn, 3dn mkdir -p /usr/local/hadoop/data/hdfs/datanode
+
+
+
+
+
+------- ** Update yarn-site.xml ** -------
+
+
+
+
+
+
