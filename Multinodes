@@ -27,7 +27,38 @@ $ cd
 $ ssh localhost
 $ exit
 $ sudo su
+[sudo] Password for hduser:
+# cd
+# cp /home/ubuntu/.ssh/northvergenia.pem /home/hduser/.ssh/
+# chown hduser:hadoop /home/hduser/.ssh/northverginia.pem
+# exit
+$ cd .ssh/
+$ ls
 
 
-* Installing Java 8 (open jdk)
 
+-----** Install Java 8 (open jdk) **------
+
+$sudo apt install default-jdk -y
+$ java -version
+
+
+
+------** Download & Install Hadoop ** -----
+
+$ wget -c < downloaded link >
+$ tar -xzvf hadoop-3.3.1.tar.gz
+$ sudo mv hadoop-3.3.1 /usr/local/hadoop 
+$ sudo chown hduser:hadoop -R /usr/local/hadoop
+
+
+-------** Setting Environment Variables **-----
+$ nano /bashrc
+
+export JAVA HOME=usr/lib/`````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````export
+export
+export
+export
+export
+export
+export
